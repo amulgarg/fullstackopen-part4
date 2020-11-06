@@ -58,6 +58,15 @@ test('a blog without likes key', async () => {
 	expect(blog.likes).toBe(0);
 });
 
+test('post api should return 400 status when title/url missing', async () => {
+	const newBlog = {
+        author: "Nate Silver",
+        url: "https://fivethirtyeight.com"
+	};
+	
+	await api.post('/api/blogs').send(newBlog).expect(400);
+});
+
 beforeEach(async () => {
 	await Blog.deleteMany({});//empty the collection
 	console.log('cleared')

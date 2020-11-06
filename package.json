@@ -4,9 +4,10 @@
   "description": "Submissions for Exercises of part 4\"",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=test=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose --runInBand"
+
   },
   "repository": {
     "type": "git",
