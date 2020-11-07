@@ -1,6 +1,5 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
-require('express-async-errors')
 
 blogsRouter.get('/', async (request, response) => {
 	const blogs = await Blog.find({});
@@ -8,9 +7,7 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-	console.log('params', request.params);
 	const result = await Blog.findByIdAndRemove(request.params.id);
-	console.log('result', result);
 	if(!result){
 		return response.status(404).send({error: 'BLOG_NOT_FOUND'});
 	}
@@ -23,5 +20,18 @@ blogsRouter.post('/', async (request, response) => {
 	const result = await blog.save();
 	response.status(201).json(result);
 })
+
+blogsRouter.put('/:id', async (request, response) => {
+	console.log('payload', request.body, request.params);
+
+	const result = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true });
+
+	if(!result){
+		return response.status(404).send({error: 'BLOG_NOT_FOUND'});
+	}
+
+	console.log('blog updated', result);
+	response.json(result);
+});
 
 module.exports = blogsRouter;

@@ -88,6 +88,31 @@ describe('deletion of a blog', () => {
 
 })
 
+describe('updating a blog', () => {
+
+	test('succeeds with status code 200 if id is valid', async () => {
+		const blogsResponse = await api.get('/api/blogs');
+		const blogToUpdate = blogsResponse.body[0]; //first blog
+		const newLikesCount = 0;
+		blogToUpdate.likes = newLikesCount;
+		
+		await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate).expect(200);
+
+		const newBlogsResponse = await api.get('/api/blogs');
+
+		const blogToCheck = newBlogsResponse.body.find(r => r.id === blogToUpdate.id);
+
+		expect(blogToCheck.likes).toBe(0);
+
+	});
+
+	test('fails with status code 404 if id is invalid', async () => {
+		const invalidBlogId = "5fa64876e60b7b4be14a2d37";		
+		await api.put(`/api/blogs/${invalidBlogId}`).send({likes: 0}).expect(404);
+	});
+
+})
+
 
 beforeEach(async () => {
 	await Blog.deleteMany({});//empty the collection
