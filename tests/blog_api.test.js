@@ -67,6 +67,28 @@ test('post api should return 400 status when title/url missing', async () => {
 	await api.post('/api/blogs').send(newBlog).expect(400);
 });
 
+describe('deletion of a blog', () => {
+
+	test('succeeds with status code 204 if id is valid', async () => {
+		const blogsResponse = await api.get('/api/blogs');
+		const blogToDelete = blogsResponse.body[blogsResponse.body.length - 1]; //last blog		
+		await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+		const newBlogsResponse = await api.get('/api/blogs');
+		const titles = newBlogsResponse.body.map(r => r.title);
+
+		expect(titles).not.toContain(blogToDelete.title);
+
+	});
+
+	test('fails with status code 404 if id is invalid', async () => {
+		const invalidBlogId = "5fa64876e60b7b4be14a2d37";		
+		await api.delete(`/api/blogs/${invalidBlogId}`).expect(404);
+	});
+
+})
+
+
 beforeEach(async () => {
 	await Blog.deleteMany({});//empty the collection
 	console.log('cleared')
