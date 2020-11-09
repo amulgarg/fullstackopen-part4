@@ -9,7 +9,7 @@ const errorHandler = (error, request, response, next) => {
 	next(error);
 }
 
-const jwtTokenExtractor = (request, response, next) => {
+const jwtTokenExtractor = async (request, response, next) => {
 	
 	let token = null;
 
