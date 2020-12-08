@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
+const CommentSchema = new mongoose.Schema({ text: String });
+
 const blogSchema = new mongoose.Schema({
 	title: {
 		type: String,
-    	required: true
+    required: true
 	},
 	author: {
 		type: String,
@@ -11,7 +13,7 @@ const blogSchema = new mongoose.Schema({
 	},
 	url: {
 		type: String,
-    	required: true
+    required: true
 	},
 	likes: {
 		type: Number,
@@ -20,8 +22,10 @@ const blogSchema = new mongoose.Schema({
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
+	},
+	comments: {
+		type: [CommentSchema],
 	}
-	
 });
 
 blogSchema.set('toJSON', {

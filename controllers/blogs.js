@@ -64,7 +64,24 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response) => {
+	console.log('put', request.params.id, request.body);
+
 	const result = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true });
+
+	if(!result){
+		return response.status(404).send({error: 'BLOG_NOT_FOUND'});
+	}
+
+	response.json(result);
+});
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+	console.log(request.params.id, request.body);
+	const blog = await Blog.findById(request.params.id);
+	console.log(blog);
+	console.log('second');
+	const result = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true });
+	console.log('result', result);
 
 	if(!result){
 		return response.status(404).send({error: 'BLOG_NOT_FOUND'});
